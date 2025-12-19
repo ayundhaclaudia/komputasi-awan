@@ -1,40 +1,37 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
-
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BillController;
 
 Route::get('/', function () {
-    return view('welcome');
-})->middleware('guest');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return redirect()->route('dashboard');
+});
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/dashboard', [BillController::class, 'index'])
+        ->name('dashboard');
+
+    Route::get('/bills/create', [BillController::class, 'create'])
+        ->name('bills.create');
+
+    Route::post('/bills', [BillController::class, 'store'])
+        ->name('bills.store');
+
+    // ===== UPGRADE =====
+    Route::get('/upgrade', function () {
+        return view('upgrade');
+    })->name('upgrade');
+
+    Route::post('/upgrade/activate', function () {
+        $user = Auth::user();
+        $user->is_premium = 1;
+        $user->save();
+
+        return redirect()->route('dashboard')
+            ->with('success', 'Akun kamu sekarang Premium ⭐');
+    })->name('upgrade.activate');
 });
 
 require __DIR__.'/auth.php';
-
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
-Route::post('/register', [RegisteredUserController::class, 'store']);
-
