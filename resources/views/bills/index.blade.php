@@ -83,7 +83,9 @@
 
 {{-- ================= EXPORT (PREMIUM ONLY) ================= --}}
 <div class="mb-3">
-    @if(auth()->user()->isPremium())
+    @if(!auth()->user()->isPremium())
+    <!-- fitur premium -->
+
         <a href="{{ route('bills.export') }}" class="btn btn-pink">
             📤 Export Excel
         </a>

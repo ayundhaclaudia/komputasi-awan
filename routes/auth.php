@@ -17,6 +17,11 @@ Route::middleware('guest')->group(function () {
 
     Route::post('register', [RegisteredUserController::class, 'store']);
 
+    Route::get('/auth/google', [RegisteredUserController::class, 'redirectGoogle'])
+        ->name('google.login');
+
+    Route::get('/auth/google/callback', [RegisteredUserController::class, 'handleGoogleCallback']);
+
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
 
@@ -56,4 +61,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
                 ->name('logout');
+
+    
+
 });
+
+

@@ -21,8 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone,'
-    ];
+        'phone',
+        ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -44,16 +44,34 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function isPremium()
+    public function isAdmin(): bool
     {
-        return $this->is_premium == 1;
+        return $this->role === 'admin';
     }
 
+    public function isPremium(): bool
+    {
+        return $this->is_premium;
+    }
 
 
     public function bills() {
         return $this->hasMany(Bill::class);
     }
+
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function activeSubscription()
+    {
+        return $this->hasOne(Subscription::class)
+            ->where('status', 'active')
+            ->where('ends_at', '>', now());
+    }
+
 
 
 }

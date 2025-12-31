@@ -57,6 +57,12 @@
                     <button class="btn btn-pink w-100">
                         Login
                     </button>
+
+                    <a href="{{ route('google.login') }}"
+                        class="btn btn-outline-danger w-100 mt-3">
+                        <i class="bi bi-google"></i> Login dengan Google
+                        </a>
+
                 </form>
 
                 <p class="text-center mt-4 mb-0">

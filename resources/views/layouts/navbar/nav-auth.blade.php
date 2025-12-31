@@ -17,6 +17,13 @@
                     </a>
                 </li>
 
+                @if(auth()->user()->isAdmin())
+                    <a href="{{ route('admin.dashboard') }}">Dashboard Admin</a>
+                    <a href="{{ route('admin.users') }}">User</a>
+                @endif
+
+
+
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('profile.edit') }}">
                         Profil

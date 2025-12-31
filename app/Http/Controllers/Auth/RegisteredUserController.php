@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Laravel\Socialite\Facades\Socialite;
 
 class RegisteredUserController extends Controller
 {
@@ -52,4 +53,15 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+    public function redirectGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function handleGoogleCallback()
+    {
+        $googleUser = Socialite::driver('google')->user();
+    }
+
 }

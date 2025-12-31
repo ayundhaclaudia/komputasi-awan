@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UpgradeController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminUserController;
 
 /*
 |--------------------------------------------------------------------------|
@@ -32,7 +34,12 @@ Route::get('/bantuan', [BillController::class, 'bantuan'])->name('bantuan');
 | AUTHENTICATED USER
 |--------------------------------------------------------------------------|
 */
+
+
+
 Route::middleware('auth')->group(function () {
+
+
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
@@ -125,6 +132,22 @@ Route::post('/upgrade/success', function () {
 Route::post('/midtrans/callback', [UpgradeController::class, 'callback']);
 
 });
+
+
+
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        Route::get('/users', [AdminUserController::class, 'index'])
+            ->name('users');
+    });
+
+
 /*
 |--------------------------------------------------------------------------
 | AUTH ROUTES

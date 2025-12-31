@@ -9,6 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Http\Controllers\AdminUserController;
+
 
 class AuthenticatedSessionController extends Controller
 {
@@ -26,11 +28,18 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        $user = auth()->user();
+
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('dashboard');
     }
+
+
 
     /**
      * Destroy an authenticated session.
